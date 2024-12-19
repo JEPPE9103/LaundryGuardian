@@ -74,7 +74,7 @@ LaundryGuardian is an IoT project designed to monitor the temperature and humidi
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/JEPPE9103/LaundryGuardian
-   cd LaundryGuardian
+   cd LaundryGuardian/dashboard
    ```
 
 2. **Install Dependencies**:
