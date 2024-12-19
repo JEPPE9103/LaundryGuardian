@@ -1,0 +1,121 @@
+/* Global stil för hela appen */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #000; /* Helt svart bakgrund */
+  color: #fff; /* Vit text */
+}
+
+.App {
+  text-align: center;
+}
+
+/* Header med förbättrad design */
+.App-header {
+  background-color: rgba(40, 44, 52, 0.8); /* Lite transparens */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Dashboard-container med förbättrad layout */
+.dashboard-container {
+  background-color: #111; /* Mörkare bakgrund */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  margin: 20px auto;
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: nowrap; /* Standard: horisontell layout */
+  gap: 20px;
+}
+
+/* Kort för diagram och tabeller */
+.chart-container {
+  flex: 1;
+  min-width: 300px; /* Minsta bredd för ett kort */
+  max-width: 100%; /* Anpassar tillgänlig bredd */
+  padding: 20px;
+  background-color: #222;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+  margin-bottom: 20px;
+}
+
+/* Titel för grafer och sektioner */
+h2 {
+  font-size: 1.8rem;
+  margin: 10px 0;
+  color: #ffcc00; /* Gul färg för kontrast */
+  text-align: center;
+}
+
+/* Responsiva tabeller */
+.table-container {
+  overflow-x: auto; /* Gör tabellen scrollbar på små skärmar */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #444;
+}
+
+tr:nth-child(even) {
+  background-color: #1a1a1a;
+}
+
+/* Länkar */
+.App-link {
+  color: #61dafb;
+  text-decoration: none;
+}
+
+.App-link:hover {
+  color: #fff;
+}
+
+/* Media Queries för responsiv design */
+@media screen and (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column; /* Ändra till vertikal layout */
+    padding: 10px;
+  }
+
+  .chart-container {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-size: 1.4rem; /* Minska rubrikstorleken */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .chart-container {
+    padding: 8px;
+  }
+
+  h2 {
+    font-size: 1.2rem; /* Ännu mindre rubrikstorlek */
+  }
+
+  th,
+  td {
+    padding: 6px; /* Mindre padding för tabeller */
+  }
+}
