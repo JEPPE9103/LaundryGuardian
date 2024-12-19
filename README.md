@@ -18,6 +18,7 @@ LaundryGuardian is an IoT project designed to monitor the temperature and humidi
   - [ESP32 Setup](#esp32-setup)
   - [Web Application Setup](#web-application-setup)
 - [How It Works](#how-it-works)
+- [Visuals](#visuals)
 - [Acknowledgments](#acknowledgments)
 - [Contact](#contact)
 
