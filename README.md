@@ -105,7 +105,7 @@ LaundryGuardian is an IoT project designed to monitor the temperature and humidi
 
 ### Web Dashboard
 Here is a PDF showcasing the LaundryGuardian dashboard with live data:
-[View Dashboard PDF](./assets/sensor_data.pdf)
+[View Dashboard PDF](./dashboard/assets/sensor_data.pdf)
 
 ---
 
