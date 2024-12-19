@@ -21,6 +21,7 @@ LaundryGuardian is an IoT project designed to monitor the temperature and humidi
 - [Visuals](#visuals)
 - [Acknowledgments](#acknowledgments)
 - [Contact](#contact)
+- [License](#license)
 
 ---
 
@@ -122,3 +123,8 @@ Here is a PDF showcasing the LaundryGuardian dashboard with live data:
 - **Email**: Jespe9103@gmail.com
 - **GitHub**: [JEPPE9103](https://github.com/JEPPE9103)
 
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
