@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue } from "firebase/database";
 
+// Din Firebase-konfiguration
 const firebaseConfig = {
   apiKey: "YOUR_FIREBASE_API_KEY",
   authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
@@ -9,6 +10,7 @@ const firebaseConfig = {
   storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
   messagingSenderId: "YOUR_FIREBASE_MESSAGING_SENDER_ID",
   appId: "YOUR_FIREBASE_APP_ID"
+
 };
 
 
