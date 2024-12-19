@@ -9,11 +9,11 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 // Wi-Fi Credentials
-const char* ssid = "Jesper – iPhone";
-const char* password = "jeppe123";
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
 
 // Firebase Realtime Database URL
-const char* firebaseUrl = "https://laundryguardian-default-rtdb.europe-west1.firebasedatabase.app/sensorData.json";
+const char* firebaseUrl = "YOUR_FIREBASE_URL";
 
 // NTP Server
 const char* ntpServer = "pool.ntp.org";
