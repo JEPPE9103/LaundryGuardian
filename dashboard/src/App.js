@@ -4,20 +4,43 @@ import Dashboard from "./Dashboard";
 import HistoricalData from "./HistoricalData";
 
 function App() {
-  const handleExportData = () => {
-    document.dispatchEvent(new Event("exportData"));
-  };
-
   return (
     <Router>
       <div>
         {/* Navigationsmeny */}
-        <nav style={{ display: "flex", justifyContent: "space-between", padding: "10px", backgroundColor: "#333", color: "yellow" }}>
-          <h2>LaundryGuardian</h2>
+        <nav
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "10px",
+            backgroundColor: "#333", // Mörk bakgrund
+            color: "#ffcc00", // Gul text
+          }}
+        >
+          <h2 style={{ color: "#ffcc00" }}>LaundryGuardian</h2>
           <ul style={{ display: "flex", listStyle: "none", gap: "15px" }}>
-            <li><Link to="/" style={{ color: "yellow", textDecoration: "none" }}>Home</Link></li>
-            <li><Link to="/historical" style={{ color: "yellow", textDecoration: "none" }}>Historical Data</Link></li>
-            <li style={{ color: "yellow", cursor: "pointer" }} onClick={handleExportData}>Export Data</li>
+            <li>
+              <Link to="/" style={{ color: "#ffcc00", textDecoration: "none" }}>
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/historical" style={{ color: "#ffcc00", textDecoration: "none" }}>
+                Historical Data
+              </Link>
+            </li>
+            <li
+              style={{
+                color: "#ffcc00",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                const exportEvent = new CustomEvent("exportData");
+                document.dispatchEvent(exportEvent);
+              }}
+            >
+              Export Data
+            </li>
           </ul>
         </nav>
 

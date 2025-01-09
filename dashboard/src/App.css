@@ -19,7 +19,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #ffcc00; /* Gul text */
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
@@ -37,24 +37,54 @@ body {
   gap: 20px;
 }
 
-/* Kort för diagram och tabeller */
-.chart-container {
-  flex: 1;
-  min-width: 300px; /* Minsta bredd för ett kort */
-  max-width: 100%; /* Anpassar tillgänlig bredd */
-  padding: 20px;
-  background-color: #222;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
-  margin-bottom: 20px;
+/* Informativa boxar */
+.info-box {
+  background-color: #2a2a2a; /* Mörk bakgrund */
+  padding: 15px; /* Samma padding */
+  border-radius: 10px; /* Rundade hörn */
+  text-align: center; /* Centrera texten */
+  font-size: 16px; /* Textstorlek */
+  font-weight: bold; /* Fet text */
+  color: #ffcc00; /* Gul text */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Skugga */
+  flex: 1; /* Låt lådorna ta upp samma utrymme */
+  min-width: 200px; /* Minsta bredd */
+  max-width: 250px; /* Maximal bredd */
 }
 
-/* Titel för grafer och sektioner */
+.info-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Titel för diagram och sektioner */
 h2 {
   font-size: 1.8rem;
   margin: 10px 0;
-  color: #ffcc00; /* Gul färg för kontrast */
+  color: #ffcc00; /* Gul färg för rubrik */
   text-align: center;
+}
+
+/* Layout för diagramsektion */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Två kolumner för diagram */
+  gap: 20px;
+}
+
+.chart-grid div {
+  background-color: #222;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Layout för informativa boxar ovanför respektive diagram */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 /* Responsiva tabeller */
@@ -80,12 +110,36 @@ tr:nth-child(even) {
 
 /* Länkar */
 .App-link {
-  color: #61dafb;
+  color: #ffcc00; /* Gul länk */
   text-decoration: none;
 }
 
 .App-link:hover {
   color: #fff;
+}
+
+/* Navigationsmeny */
+nav {
+  background-color: #333; /* Mörk bakgrund */
+  color: #ffcc00; /* Gul text */
+}
+
+nav h2 {
+  color: #ffcc00; /* Gul rubrik */
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 15px;
+}
+
+nav ul li {
+  color: #ffcc00; /* Gul text */
+}
+
+nav ul li:hover {
+  text-decoration: underline;
 }
 
 /* Media Queries för responsiv design */
@@ -95,13 +149,17 @@ tr:nth-child(even) {
     padding: 10px;
   }
 
-  .chart-container {
-    padding: 10px;
-    margin-bottom: 10px;
+  .chart-grid {
+    grid-template-columns: 1fr; /* En kolumn för små skärmar */
   }
 
-  h2 {
-    font-size: 1.4rem; /* Minska rubrikstorleken */
+  .info-row {
+    flex-direction: column; /* Lådorna placeras vertikalt */
+    gap: 15px;
+  }
+
+  .info-box {
+    font-size: 16px;
   }
 }
 
@@ -110,8 +168,17 @@ tr:nth-child(even) {
     padding: 8px;
   }
 
+  .chart-grid div {
+    padding: 15px;
+  }
+
   h2 {
     font-size: 1.2rem; /* Ännu mindre rubrikstorlek */
+  }
+
+  .info-box {
+    font-size: 14px;
+    padding: 15px;
   }
 
   th,

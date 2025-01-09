@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { database, ref, onValue } from "./firebaseConfig";
 import { query, limitToLast } from "firebase/database";
-import { Line, Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import {
@@ -10,7 +10,6 @@ import {
   LinearScale,
   PointElement,
   LineElement,
-  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -18,46 +17,31 @@ import {
 } from "chart.js";
 import "./App.css";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
-
-ChartJS.defaults.font.size = 14;
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 const Dashboard = () => {
   const [data, setData] = useState([]);
-  const [dataPoints] = useState(20);
   const dashboardRef = useRef(null);
 
-  // Hämtar data från Firebase
+  // Hämta data från Firebase
   useEffect(() => {
-    const sensorRef = query(ref(database, "sensorData"), limitToLast(dataPoints));
+    const sensorRef = query(ref(database, "sensorData"), limitToLast(20)); // Hämta de senaste 20 värdena
     onValue(sensorRef, (snapshot) => {
       const value = snapshot.val();
       if (value) {
         setData(Object.values(value));
       }
     });
-  }, [dataPoints]);
+  }, []);
 
-  const latestData = data.length > 0 ? data[data.length - 1] : { temperature: 0, humidity: 0 };
-
-  // Exportera till PDF med useCallback för att undvika varningen
+  // Exportera dashboard till PDF
   const exportDataToPDF = useCallback(() => {
     if (!dashboardRef.current) {
       console.error("Dashboard reference is null");
       return;
     }
 
-    const recentData = data.slice(-20);
+    const recentData = data.slice(-20); // Se till att vi använder de senaste 20 värdena
 
     html2canvas(dashboardRef.current, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
@@ -68,131 +52,118 @@ const Dashboard = () => {
       const imgWidth = pageWidth - 20;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
+      // Lägg till dashboard som bild
       pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
 
+      // Lägg till data under bilden
       let y = imgHeight + 20;
       pdf.setFontSize(12);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text("Latest 20 Sensor Data", 10, y);
+      pdf.setTextColor(0, 0, 0); // Svart text
+      pdf.text("Latest 20 Sensor Data:", 10, y);
 
       pdf.setFontSize(10);
       recentData.forEach((entry, index) => {
         y += 6;
-        const line = `${index + 1}. Time: ${new Date(entry.timestamp).toLocaleString()} | Temp: ${entry.temperature}°C | Hum: ${entry.humidity}%`;
+        const textLine = `${index + 1}. Time: ${new Date(entry.timestamp).toLocaleString()} | Temp: ${
+          entry.temperature
+        }°C | Hum: ${entry.humidity}%`;
         if (y > pageHeight - 10) {
           pdf.addPage();
           y = 10;
         }
-        pdf.text(line, 10, y);
+        pdf.text(textLine, 10, y);
       });
 
-      pdf.save("sensor_data.pdf");
-    }).catch((error) => {
-      console.error("Failed to export PDF:", error);
+      pdf.save("sensor_dashboard_with_data.pdf");
     });
   }, [data]);
 
-  // Lägg till export-händelsen
+  // Lyssna på "exportData"-händelsen från App.js
   useEffect(() => {
     const handleExport = () => exportDataToPDF();
     document.addEventListener("exportData", handleExport);
+
     return () => document.removeEventListener("exportData", handleExport);
   }, [exportDataToPDF]);
+
+  // Beräkna data för informativa lådor
+  const latestData = data.length > 0 ? data[data.length - 1] : { temperature: 0, humidity: 0 };
+  const highestTemp = Math.max(...data.map((entry) => entry.temperature || 0));
+  const lowestTemp = Math.min(...data.map((entry) => entry.temperature || 0));
+  const highestHumidity = Math.max(...data.map((entry) => entry.humidity || 0));
+  const lowestHumidity = Math.min(...data.map((entry) => entry.humidity || 0));
+
+  // Diagramdata
+  const temperatureData = {
+    labels: data.map((_, index) => `Entry ${index + 1}`),
+    datasets: [
+      {
+        label: "Temperature (°C)",
+        data: data.map((entry) => entry.temperature),
+        fill: true,
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const humidityData = {
+    labels: data.map((_, index) => `Entry ${index + 1}`),
+    datasets: [
+      {
+        label: "Humidity (%)",
+        data: data.map((entry) => entry.humidity),
+        fill: true,
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        tension: 0.4,
+      },
+    ],
+  };
 
   return (
     <div
       ref={dashboardRef}
       style={{
-        display: "flex",
-        alignItems: "flex-start",
         backgroundColor: "#1a1a1a",
         padding: "20px",
-        color: "yellow",
         fontFamily: "Arial, sans-serif",
-        gap: "20px",
+        minHeight: "100vh",
+        color: "white",
       }}
     >
-      <div style={{ flex: 1 }}>
-        <h2 className="chart-title">Temperature Over Time</h2>
-        <Line
-          data={{
-            labels: data.map((_, index) => `Entry ${index + 1}`),
-            datasets: [
-              {
-                label: "Temperature (°C)",
-                data: data.map((entry) => entry.temperature),
-                fill: true,
-                backgroundColor: "rgba(255, 255, 0, 0.2)",
-                borderColor: "yellow",
-                tension: 0.4,
-              },
-            ],
-          }}
-          options={{ responsive: true }}
-          style={{ height: "300px" }}
-        />
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "30px",
+          color: "yellow",
+          fontSize: "2rem",
+          fontWeight: "bold",
+        }}
+      >
+        Sensor Dashboard
+      </h1>
 
-        <h2 className="chart-title">Humidity Over Time</h2>
-        <Line
-          data={{
-            labels: data.map((_, index) => `Entry ${index + 1}`),
-            datasets: [
-              {
-                label: "Humidity (%)",
-                data: data.map((entry) => entry.humidity),
-                fill: true,
-                backgroundColor: "rgba(0, 255, 255, 0.2)",
-                borderColor: "cyan",
-                tension: 0.4,
-              },
-            ],
-          }}
-          options={{ responsive: true }}
-          style={{ height: "300px" }}
-        />
-      </div>
-
-      <div style={{ flex: 1, minWidth: "400px", display: "flex", flexDirection: "column", gap: "20px", marginTop: "-20px" }}>
-        <h2 className="chart-title">Temperature & Humidity Trends</h2>
-        <Bar
-          data={{
-            labels: data.map((entry) => new Date(entry.timestamp).toLocaleTimeString()),
-            datasets: [
-              {
-                label: "Temperature (°C)",
-                data: data.map((entry) => entry.temperature),
-                backgroundColor: "rgba(255, 255, 0, 0.7)",
-                borderColor: "yellow",
-              },
-              {
-                label: "Humidity (%)",
-                data: data.map((entry) => entry.humidity),
-                backgroundColor: "rgba(0, 255, 255, 0.7)",
-                borderColor: "cyan",
-              },
-            ],
-          }}
-          options={{ responsive: true }}
-          style={{ height: "300px" }}
-        />
-
-        <h2 className="chart-title">Latest Sensor Data</h2>
-        <Bar
-          data={{
-            labels: ["Temperature", "Humidity"],
-            datasets: [
-              {
-                label: "Latest Value",
-                data: [latestData.temperature, latestData.humidity],
-                backgroundColor: ["rgba(255, 255, 0, 0.7)", "rgba(0, 255, 255, 0.7)"],
-                borderColor: ["yellow", "cyan"],
-                borderWidth: 1,
-              },
-            ],
-          }}
-          options={{ responsive: true }}
-          style={{ height: "300px" }}
-        />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+        <div>
+          <div className="info-row">
+            <div className="info-box">Current Temperature: {latestData.temperature}°C</div>
+            <div className="info-box">Highest Temperature: {highestTemp}°C</div>
+            <div className="info-box">Lowest Temperature: {lowestTemp}°C</div>
+          </div>
+          <h2>Temperature Over Time</h2>
+          <Line data={temperatureData} options={{ responsive: true }} />
+        </div>
+        <div>
+          <div className="info-row">
+            <div className="info-box">Current Humidity: {latestData.humidity}%</div>
+            <div className="info-box">Highest Humidity: {highestHumidity}%</div>
+            <div className="info-box">Lowest Humidity: {lowestHumidity}%</div>
+          </div>
+          <h2>Humidity Over Time</h2>
+          <Line data={humidityData} options={{ responsive: true }} />
+        </div>
       </div>
     </div>
   );

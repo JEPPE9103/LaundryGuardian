@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, query, limitToLast } from "firebase/database";
 
 // Din Firebase-konfiguration
 const firebaseConfig = {
@@ -19,4 +19,4 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 // Exportera för användning i andra filer
-export { database, ref, onValue };
+export { database, ref, onValue, query, limitToLast };
